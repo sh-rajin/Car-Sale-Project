@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center p-5">
+
+    {%for user in data%}
+    <h2>UserName: {{user.username}}</h2>
+    <h4>First Name: {{user.first_name}}</h4>
+    <h4>Last Name: {{user.last_name}}</h4>
+    <h4>Email: {{user.email}}</h4>
+    {% endfor %}
+    <a href="{% url 'edit_profile' %}" class='btn btn-warning mt-3 text-white'>Edit Profile</a>
+</div>
+
+{% endblock content %}

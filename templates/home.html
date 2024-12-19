@@ -1,0 +1,70 @@
+{% extends "base.html" %} 
+{% block content %}
+
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <p class="alert alert-{{ message.tags }}">{{ message }}</p>
+    {% endfor %}
+  </div>
+{% endif %}
+
+
+<div class="d-flex flex-wrap p-3">
+  <div class="col-md-6 col-12 d-flex text-center">
+    <p class="p-5">
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deserunt nam sed distinctio laudantium corporis ipsum rerum magnam reiciendis excepturi ab nihil, molestiae tempore quisquam quia iste adipisci accusamus ratione. Numquam expedita quisquam unde debitis exercitationem. Sed, nemo architecto id nam quos blanditiis quod assumenda! Dignissimos veniam, ex laborum sint accusantium minima placeat illo totam distinctio sunt dicta incidunt qui recusandae eligendi eaque. Vitae, ad quam officia, quas aperiam sint doloribus quidem molestias sit odit architecto necessitatibus impedit nam at. Eius aliquam quidem cum velit dignissimos explicabo ad qui. Dicta officia unde laborum architecto amet quidem, quas consequatur optio sunt consequuntur!
+    </p>
+  </div>
+  <div class="col-md-6 col-12 d-flex align-items-center justify-content-center order-first">
+    <img src="/media/profile.jpg" alt="" style="width: 75%" />
+  </div>
+</div>
+
+
+<div class="my-4">
+  <div class="mx-3 fs-4 fw-bold">
+    <a href="{% url 'homepage' %}" class="text-decoration-none text-dark ms-3">All Brands:</a>
+    {% for br in brand %}
+      <a href="{% url 'brand_wise_car' br.slug %}" class="text-decoration-none text-white m-2 btn btn-secondary"> {{ br.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+<div class="cars">
+  <h3 class="text-center">Car Models</h3>
+  <h4 class="text-center">{{data | length }} results found!</h4>
+  <div class="d-flex flex-wrap m-3">
+    {%if not data == None%}
+    {% for car in data %}
+      <div class="card m-2" style="width: 18rem;">
+        <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.name }}">
+        <div class="card-body">
+          <a href="{% url 'detail_car' car.id %}"><h5 class="card-title">{{ car.name }}</h5></a>
+          <p class="card-text">{{ car.description }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Brand: {{ car.brand.name }}</li>
+          <li class="list-group-item">Price: ${{ car.price }}</li>
+          <li class="list-group-item">Quantity: {{ car.quantity }}</li>
+        </ul>
+        {% if user.is_authenticated %}
+          {% if car.quantity > 0 %}
+            <a href="{% url 'buy_now' car.id %}" class="btn btn-small btn-primary align-items-center m-2 text-white">Buy Now</a>
+          {% else %}
+            <button class="btn btn-small btn-danger m-2" disabled>Out of Stock</button>
+          {% endif %}
+        {% else %}
+          <a href="{% url 'user_login' %}" class="btn btn-small btn-warning m-2 text-white">Login to Buy</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+    {% else %}
+    <div class="m-3">No cars available for this brand.</div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock content %}
